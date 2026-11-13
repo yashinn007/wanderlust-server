@@ -34,26 +34,18 @@ const verifyToken = async (req, res, next) => {
     return res.status(401).json({ message: "Unauthorized" });
   }
   //verifying..
-  // try {
-  //   const { payload } = await jwtVerify(token, JWKS);
-  //   console.log("payload:", payload);
-  //   next();
-  // } catch (error) {
-  //   return res.status(403).json({ message: "Forbidden" });
-  // }
   try {
     const { payload } = await jwtVerify(token, JWKS);
     console.log("payload:", payload);
     next();
   } catch (error) {
-    console.error("JWT verify failed:", error.code, error.message);
-    return res
-      .status(403)
-      .json({
-        message: "Forbidden",
-        reason: error.code,
-        detail: error.message,
-      });
+    console.error("JWT verify failed:", error.code, error.name, error.message);
+    return res.status(403).json({
+      message: "Forbidden",
+      reason: error.code,
+      name: error.name,
+      detail: error.message,
+    });
   }
 };
 
